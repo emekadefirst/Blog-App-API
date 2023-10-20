@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from django.core.exceptions import ValidationError
-from .models import BlogPost, Comment
-from django.contrib.auth import get_user_model, authenticate
+from rest_framework.serializers import ModelSerializer
 
+from .models import BlogPost, Comment
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 UserModel = get_user_model()
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    
     category = serializers.CharField(source='category.name')
 
     class Meta:
@@ -20,35 +20,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        
-
-class UserRegisterSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = UserModel
-		fields = '__all__'
-
-	def create(self, clean_data):
-		user_obj = UserModel.objects.create_user(
-		    email=clean_data['email'], password=clean_data['password'])
-		user_obj.username = clean_data['username']
-		user_obj.save()
-		return user_obj
 
 
-class UserLoginSerializer(serializers.Serializer):
-	email = serializers.EmailField()
-	password = serializers.CharField()
-	##
-
-	def check_user(self, clean_data):
-		user = authenticate(
-		    username=clean_data['email'], password=clean_data['password'])
-		if not user:
-			raise ValidationError('user not found')
-		return user
-
-
-class UserSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = UserModel
-		fields = ('email', 'username')
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
+    
+            

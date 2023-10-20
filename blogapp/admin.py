@@ -17,7 +17,12 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
+# class TokenAdmin(admin.ModelAdmin):
+#     list_display = ['user', 'token', 'created_at']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Comment, CommentAdmin)
+# admin.site.register(Token, TokenAdmin)
 
